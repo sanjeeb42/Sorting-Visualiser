@@ -1,162 +1,78 @@
-"use strict";
-class sortAlgorithms {
-    constructor(time) {
-        this.list = document.querySelectorAll(".cell");
-        this.size = this.list.length;
-        this.time = time;
-        this.help = new Helper(this.time, this.list);
-    }
 
-    // BUBBLE SORT
-    BubbleSort = async () => {
-        for(let i = 0 ; i < this.size - 1 ; ++i) {
-            for(let j = 0 ; j < this.size - i - 1 ; ++j) {
-                await this.help.mark(j);
-                await this.help.mark(j+1);
-                if(await this.help.compare(j, j+1)) {
-                    await this.help.swap(j, j+1);
-                }
-                await this.help.unmark(j);
-                await this.help.unmark(j+1);
-            }
-            this.list[this.size - i - 1].setAttribute("class", "cell done");
-        }
-        this.list[0].setAttribute("class", "cell done");
-    }
+async function partitionLomuto(ele, l, r){
+    console.log('In partitionLomuto()');
+    let i = l - 1;
+    // color pivot element
+    ele[r].style.background = 'red';
+    for(let j = l; j <= r - 1; j++){
+        console.log('In partitionLomuto for j');
+        // color current element
+        ele[j].style.background = 'yellow';
+        // pauseChamp
+        await waitforme(delay);
 
-    // INSERTION SORT
-    InsertionSort = async () => {
-        for(let i = 0 ; i < this.size - 1 ; ++i) {
-            let j = i;
-            while(j >= 0 && await this.help.compare(j, j+1)) {
-                await this.help.mark(j);
-                await this.help.mark(j+1);
-                await this.help.pause();
-                await this.help.swap(j, j+1);
-                await this.help.unmark(j);
-                await this.help.unmark(j+1);
-                j -= 1;
-            }
+        if(parseInt(ele[j].style.height) < parseInt(ele[r].style.height)){
+            console.log('In partitionLomuto for j if');
+            i++;
+            swap(ele[i], ele[j]);
+            // color 
+            ele[i].style.background = 'orange';
+            if(i != j) ele[j].style.background = 'orange';
+            // pauseChamp
+            await waitforme(delay);
         }
-        for(let counter = 0 ; counter < this.size ; ++counter) {
-            this.list[counter].setAttribute("class", "cell done");
+        else{
+            // color if not less than pivot
+            ele[j].style.background = 'pink';
         }
     }
+    i++; 
+    // pauseChamp
+    await waitforme(delay);
+    swap(ele[i], ele[r]); // pivot height one
+    console.log(`i = ${i}`, typeof(i));
+    // color
+    ele[r].style.background = 'pink';
+    ele[i].style.background = 'green';
 
-    // SELECTION SORT
-    SelectionSort = async () => {
-        for(let i = 0 ; i < this.size ; ++i) {
-            let minIndex = i;
-            for(let j = i ; j < this.size ; ++j) {
-                await this.help.markSpl(minIndex);
-                await this.help.mark(j);
-                if(await this.help.compare(minIndex, j)) {
-                    await this.help.unmark(minIndex);
-                    minIndex = j;
-                }
-                await this.help.unmark(j);
-                await this.help.markSpl(minIndex);
-            }
-            await this.help.mark(minIndex);
-            await this.help.mark(i);
-            await this.help.pause();
-            await this.help.swap(minIndex, i);
-            await this.help.unmark(minIndex);
-            this.list[i].setAttribute("class", "cell done");
-        }
+    // pauseChamp
+    await waitforme(delay);
+    
+    // color
+    for(let k = 0; k < ele.length; k++){
+        if(ele[k].style.background != 'green')
+            ele[k].style.background = 'cyan';
     }
 
-    // MERGE SORT
-    MergeSort = async () => {
-        await this.MergeDivider(0, this.size - 1);
-        for(let counter = 0 ; counter < this.size ; ++counter) {
-            this.list[counter].setAttribute("class", "cell done");
+    return i;
+}
+
+async function quickSort(ele, l, r){
+    console.log('In quickSort()', `l=${l} r=${r}`, typeof(l), typeof(r));
+    if(l < r){
+        let pivot_index = await partitionLomuto(ele, l, r);
+        await quickSort(ele, l, pivot_index - 1);
+        await quickSort(ele, pivot_index + 1, r);
+    }
+    else{
+        if(l >= 0 && r >= 0 && l <ele.length && r <ele.length){
+            ele[r].style.background = 'green';
+            ele[l].style.background = 'green';
         }
     }
+}
 
-    MergeDivider = async (start, end) => {
-        if(start < end) {
-            let mid = start + Math.floor((end - start)/2);
-            await this.MergeDivider(start, mid);
-            await this.MergeDivider(mid+1, end);
-            await this.Merge(start, mid, end);
-        }
-    }
 
-    Merge = async (start, mid, end) => {
-        let newList = new Array();
-        let frontcounter = start;
-        let midcounter = mid + 1;
-        
-        while(frontcounter <= mid && midcounter <= end) {
-            let fvalue = Number(this.list[frontcounter].getAttribute("value"));
-            let svalue = Number(this.list[midcounter].getAttribute("value"));
-            if(fvalue >= svalue) {
-                newList.push(svalue);
-                ++midcounter;
-            }
-            else {
-                newList.push(fvalue);
-                ++frontcounter;
-            }
-        }
-        while(frontcounter <= mid) {
-            newList.push(Number(this.list[frontcounter].getAttribute("value")));
-            ++frontcounter;
-        }
-        while(midcounter <= end) {
-            newList.push(Number(this.list[midcounter].getAttribute("value")));
-            ++midcounter;
-        }
-
-        for(let c = start ; c <= end ; ++c) {
-            this.list[c].setAttribute("class", "cell current");
-        }
-        for(let c = start, point = 0 ; c <= end && point < newList.length; 
-            ++c, ++point) {
-                await this.help.pause();
-                this.list[c].setAttribute("value", newList[point]);
-                this.list[c].style.height = `${3.5*newList[point]}px`;
-        }
-        for(let c = start ; c <= end ; ++c) {
-            this.list[c].setAttribute("class", "cell");
-        }
-    }
-
-    // QUICK SORT
-    QuickSort = async () => {
-        await this.QuickDivider(0, this.size-1);
-        for(let c = 0 ; c < this.size ; ++c) {
-            this.list[c].setAttribute("class", "cell done");
-        }
-    }
-
-    QuickDivider = async (start, end) => {
-        if(start < end) {
-            let pivot = await this.Partition(start, end);
-            await this.QuickDivider(start, pivot-1);
-            await this.QuickDivider(pivot+1, end);
-        }
-    }
-
-    Partition = async (start, end) => {
-        let pivot = this.list[end].getAttribute("value");
-        let prev_index = start - 1;
-
-        await this.help.markSpl(end);
-        for(let c = start ; c < end ; ++c) {
-            let currValue = Number(this.list[c].getAttribute("value"));
-            await this.help.mark(c);
-            if(currValue < pivot) {
-                prev_index += 1;
-                await this.help.mark(prev_index);
-                await this.help.swap(c, prev_index);
-                await this.help.unmark(prev_index);
-            }
-            await this.help.unmark(c);
-        }
-        await this.help.swap(prev_index+1, end);
-        await this.help.unmark(end);
-        return prev_index + 1;
-    }
-};
+const quickSortbtn = document.querySelector(".quickSort");
+quickSortbtn.addEventListener('click', async function(){
+    let ele = document.querySelectorAll('.bar');
+    let l = 0;
+    let r = ele.length - 1;
+    disableSortingBtn();
+    disableSizeSlider();
+    disableNewArrayBtn();
+    await quickSort(ele, l, r);
+    enableSortingBtn();
+    enableSizeSlider();
+    enableNewArrayBtn();
+});
