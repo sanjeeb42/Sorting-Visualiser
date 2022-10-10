@@ -2,77 +2,54 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet" />
-
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-  <link rel="stylesheet" href="./css/style.css" />
-  <title>Sorting visualizer</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
 </head>
+<header>
+    <h1 align="center">My Sorting Visualizer</h1>
+    <nav>
+        <div class="row">
+            <div class="col gap-2 d-sm-flex" id="newArray">
+                <button type="button" class="btn btn-outline-info btn-dark newArray">Generate an Array</button>
+            </div>
+            <div class="col" id="input">
 
-<body>
-  <div class="nav-container">
-    <h2 class="title" onclick="window.location.reload()">
-      Sorting visualizer 
-    </h2>
-    <div class="navbar" id="navbar">
-      
-      <span class="options">
-        <select name="select sort algorithm" id="menu" class="algo-menu">
-          <option value="0">Choose an algorithm</option>
-          <option value="1">Bubble Sort</option>
-          <option value="2">Selection Sort</option>
-          <option value="3">Insertion Sort</option>
-          <option value="4">Merge Sort</option>
-          <option value="5">Quick Sort</option>
-        </select>
-      </span>
-      <span class="options">
-        <select name="Please select array size" id="menu" class="size-menu">
-          <option value="0">Array size</option>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
-          <option value="60">60</option>
-          <option value="70">70</option>
-          <option value="80">80</option>
-          <option value="90">90</option>
-          <option value="100">100</option>
-        </select>
-      </span>
-      <a id="random" onclick="RenderScreen()">Generate array</a>
-      <span class="options">
-        <select name="speed of visualization" id="menu" class="speed-menu">
-          <option value="0">Speed</option>
-          <option value="0.5">0.50x</option>
-          <option value="0.75">0.75x</option>
-          <option value="1">1.00x</option>
-          <option value="2">2.00x</option>
-          <option value="4">4.00x</option>
-        </select>
-      </span>
-      <a class="start">Sort</a>
-      <a class="icon"><i class="fa fa-bars"></i></a>
-    </div>
-  </div>
-  <div class="center">
-    <div class="array"></div>
-  </div>
-  <footer class="footer">
-    <p>Created with <i class="fa fa-heart"></i> by Sanjeeb</p>
-    
-  </footer>
-  <script src="./scripts/app.js"></script>
-  <script src="./scripts/helper.js"></script>
-  <script src="./scripts/sort-algorithms.js"></script>
+                <span id="speed">Speed
+                    <input id="speed_input" type="range" min="20" max="300" stepDown=10 value=60>
+                </span>
+                <span id="size">Size
+                    <input id="arr_sz" type="range" min="5" max="120" step=1 value=60>
+                </span>
+            </div>
+            <div class="col gap-2 d-sm-flex justify-content-end">
+                <button type="button" class="btn btn-outline-primary btn-dark mergeSort">Merge Sort</button>
+                <button type="button" class="btn btn-outline-primary btn-dark quickSort">Quick Sort</button>
+                <button type="button" class="btn btn-outline-primary btn-dark bubbleSort">Bubble Sort</button>
+                <button type="button" class="btn btn-outline-primary btn-dark selectionSort">Selection Sort</button>
+                <button type="button" class="btn btn-outline-primary btn-dark insertionSort">Insertion Sort</button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<body class="p-3 mb-2 bg-dark text-white">
+
+    <div id="bars" class="flex-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+    <script src="js_files/sorting.js"></script>
+    <script src="js_files/bubble.js"></script>
+    <script src="js_files/insertion.js"></script>
+    <script src="js_files/merge.js"></script>
+    <script src="js_files/quick.js"></script>
+    <script src="js_files/selection.js"></script>
 </body>
 
 </html>
